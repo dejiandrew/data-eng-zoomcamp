@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: staging
     database: de-zoomcamp-module-4  # Your project name
-    schema: module4-all_trips_dataset  # Your dataset name
+    schema: module4_all_trips_dataset  # Your dataset name
     tables:
       - name: green_tripdata
       - name: yellow_tripdata
