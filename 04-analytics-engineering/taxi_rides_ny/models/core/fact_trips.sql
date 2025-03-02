@@ -15,15 +15,64 @@ yellow_tripdata as (
     from {{ ref('stg_yellow_tripdata') }}
 ), 
 trips_unioned as (
-    select * from green_tripdata
+    select 
+        tripid,
+        vendorid,
+        service_type,
+        ratecodeid,
+        pickup_locationid,
+        dropoff_locationid,
+        pickup_datetime,
+        dropoff_datetime,
+        cast(store_and_fwd_flag as string) as store_and_fwd_flag,
+        passenger_count,
+        trip_distance,
+        trip_type,
+        fare_amount,
+        extra,
+        mta_tax,
+        tip_amount,
+        tolls_amount,
+        ehail_fee,
+        improvement_surcharge,
+        total_amount,
+        payment_type,
+        payment_type_description
+    from green_tripdata
+    
     union all 
-    select * from yellow_tripdata
+    
+    select 
+        tripid,
+        vendorid,
+        service_type,
+        ratecodeid,
+        pickup_locationid,
+        dropoff_locationid,
+        pickup_datetime,
+        dropoff_datetime,
+        cast(store_and_fwd_flag as string) as store_and_fwd_flag,
+        passenger_count,
+        trip_distance,
+        trip_type,
+        fare_amount,
+        extra,
+        mta_tax,
+        tip_amount,
+        tolls_amount,
+        ehail_fee,
+        improvement_surcharge,
+        total_amount,
+        payment_type,
+        payment_type_description
+    from yellow_tripdata
 ), 
 dim_zones as (
     select * from {{ ref('dim_zones') }}
     where borough != 'Unknown'
 )
-select trips_unioned.tripid, 
+select 
+    trips_unioned.tripid, 
     trips_unioned.vendorid, 
     trips_unioned.service_type,
     trips_unioned.ratecodeid, 
@@ -51,6 +100,6 @@ select trips_unioned.tripid,
     trips_unioned.payment_type_description
 from trips_unioned
 inner join dim_zones as pickup_zone
-on trips_unioned.pickup_locationid = pickup_zone.locationid
+    on trips_unioned.pickup_locationid = pickup_zone.locationid
 inner join dim_zones as dropoff_zone
-on trips_unioned.dropoff_locationid = dropoff_zone.locationid
+    on trips_unioned.dropoff_locationid = dropoff_zone.locationid
